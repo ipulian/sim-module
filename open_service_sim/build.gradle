@@ -1,0 +1,119 @@
+if (rootProject.ext.android.isApplication) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+
+apply plugin: 'maven'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+def mAndroid = rootProject.ext.android
+
+android {
+    compileSdkVersion mAndroid.compileSdkVersion
+    buildToolsVersion mAndroid.buildToolsVersion
+
+    defaultConfig {
+        if (mAndroid.isApplication) {
+            applicationId "com.ipusoft.simmodule"
+        }
+        minSdkVersion mAndroid.minSdkVersion
+        targetSdkVersion mAndroid.targetSdkVersion
+        versionCode mAndroid.versionCode
+        versionName mAndroid.versionName
+
+        testInstrumentationRunner mAndroid.testInstrumentationRunner
+        consumerProguardFiles "consumer-rules.pro"
+
+        flavorDimensions "open_service_sim"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.schemaLocation": "$projectDir/schemas".toString(),
+                        AROUTER_MODULE_NAME  : project.getName()
+                ]
+            }
+        }
+    }
+    productFlavors {
+        pro {
+            dimension 'open_service_sim'
+            missingDimensionStrategy "network", "pro"
+        }
+        dev {
+            dimension 'open_service_sim'
+            missingDimensionStrategy "network", "dev"
+        }
+        ct {
+            dimension 'open_service_sim'
+            missingDimensionStrategy "network", "ct"
+        }
+        hx {
+            dimension 'open_service_sim'
+            missingDimensionStrategy "network", "hx"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    sourceSets {
+        main {
+            if (mAndroid.isApplication) {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                //java.srcDir 'src/main/module'
+            } else {
+                manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+                java {
+                    exclude '**/debug/**'
+                }
+            }
+        }
+    }
+
+    buildFeatures { dataBinding = true }
+}
+
+dependencies {
+    autoDepends(this.project)
+}
+
+repositories {
+    mavenCentral()
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+//            snapshotRepository(url: MAVEN_REPO_SNAPSHOT_URL) {
+//                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+//            }
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.project {
+                version '1.0.0'
+                artifactId ARTIFACT_ID
+                groupId GROUP_ID
+                packaging TYPE
+                description "更新描述"
+            }
+        }
+    }
+}
