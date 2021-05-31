@@ -1,4 +1,4 @@
-def isApp = true
+def isApp = false
 if (isApp) {
     apply plugin: 'com.android.application'
 } else {
