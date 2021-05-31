@@ -8,6 +8,7 @@ import com.ipusoft.context.db.DBManager;
 import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.GsonUtils;
 import com.ipusoft.sim.constant.Constant;
+import com.ipusoft.sim.constant.UploadStatus;
 
 import java.util.List;
 
@@ -24,16 +25,77 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  */
 
 public class SysRecordingRepo {
-    private static final String TAG = "SysRecordingRepository";
+    private static final String TAG = "SysRecordingRepo";
 
-    public static void queryByStatusForListPage(List<Integer> uploadStatus, IObserver<List<SysRecording>> observer) {
+    /**
+     * 查询等待上传的记录
+     */
+    public static void queryWaitingList(int page, IObserver<List<SysRecording>> observer) {
+        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(
+                ArrayUtils.createList(UploadStatus.WAIT_UPLOAD.getStatus()), page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 查询上传成功的记录
+     */
+    public static void querySucceedList(int page, IObserver<List<SysRecording>> observer) {
+        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(
+                ArrayUtils.createList(UploadStatus.UPLOAD_SUCCEED.getStatus()), page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 查询上传失败的记录
+     */
+    public static void queryFailedList(int page, IObserver<List<SysRecording>> observer) {
+        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(
+                ArrayUtils.createList(UploadStatus.UPLOAD_FAILED.getStatus()), page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 查询正在上传的记录
+     */
+    public static void queryUploadingList(int page, IObserver<List<SysRecording>> observer) {
+        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(
+                ArrayUtils.createList(UploadStatus.UPLOADING.getStatus()), page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 根据状态和页数查询记录
+     *
+     * @param uploadStatus
+     * @param page
+     * @param observer
+     */
+    public static void queryByStatusForListPage(List<Integer> uploadStatus, int page,
+                                                IObserver<List<SysRecording>> observer) {
+        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, 0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void queryByStatusForListPage(List<Integer> uploadStatus,
+                                                IObserver<List<SysRecording>> observer) {
         DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    public static void queryByStatus(List<Integer> uploadStatus, int retryCount, long currentTime,
+    public static void queryByStatus(List<Integer> uploadStatus, int retryCount,
+                                     long currentTime,
                                      IObserver<List<SysRecording>> observe) {
         DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, retryCount, currentTime, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
@@ -41,7 +103,8 @@ public class SysRecordingRepo {
                 .subscribe(observe);
     }
 
-    public static void queryByStatusForMainThread(List<Integer> uploadStatus, int retryCount, long currentTime,
+    public static void queryByStatusForMainThread(List<Integer> uploadStatus, int retryCount,
+                                                  long currentTime,
                                                   IObserver<List<SysRecording>> observe) {
         DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, retryCount, currentTime, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
@@ -127,7 +190,8 @@ public class SysRecordingRepo {
                 .subscribe(observe);
     }
 
-    public static void updateRecordingList(List<SysRecording> list, IObserver<Boolean> observe) {
+    public static void updateRecordingList
+            (List<SysRecording> list, IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             DBManager.getSysRecordingDao().updateStatusList(list);
             emitter.onNext(true);
@@ -137,7 +201,8 @@ public class SysRecordingRepo {
                 .subscribe(observe);
     }
 
-    public static void deleteOldRecording(List<Integer> statusList, long timestamp, IObserver<Boolean> observe) {
+    public static void deleteOldRecording(List<Integer> statusList, long timestamp, IObserver<
+            Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             DBManager.getSysRecordingDao().deleteOldRecording(timestamp, statusList);
             emitter.onNext(true);

@@ -14,17 +14,17 @@ import com.ipusoft.context.IpuSoftSDK;
  * desc   :
  */
 
-public class PhoneManager {
+public class SimPhoneManager {
     private static final String SMS_TO = "smsto:";
 
     private static final String SMS_BODY = "sms_body";
 
     /**
-     * 直接外呼
+     * 主卡外呼
      *
      * @param phone
      */
-    public static void callOut(String phone) {
+    public static void callOutBySim(String phone) {
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         AppCompatActivity currentActivity = IActivityLifecycle.getCurrentActivity();
@@ -33,15 +33,6 @@ public class PhoneManager {
         } else {
             IpuSoftSDK.getAppContext().startActivity(intent);
         }
-    }
-
-    /**
-     * 主卡外呼
-     *
-     * @param phone
-     */
-    public static void callOutBySim(String phone) {
-        callOut(phone);
     }
 
     /**

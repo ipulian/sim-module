@@ -8,7 +8,7 @@ import com.ipusoft.sim.bean.SimRiskControlBean;
 import com.ipusoft.sim.component.IAlertDialog;
 import com.ipusoft.sim.iface.OnSimCallPhoneResultListener;
 import com.ipusoft.sim.iface.SimConstant;
-import com.ipusoft.sim.manager.PhoneManager;
+import com.ipusoft.sim.manager.SimPhoneManager;
 import com.ipusoft.sim.module.SimService;
 
 import java.util.HashMap;
@@ -61,7 +61,7 @@ public class SimHttp {
                         if (SimConstant.TYPE_1 == type || SimConstant.TYPE_2 == type) {
                             showRiskControlDialog(simRiskControlBean);
                         } else {
-                            PhoneManager.callOut(phone);
+                            SimPhoneManager.callOutBySim(phone);
                         }
                     }
 
@@ -87,7 +87,7 @@ public class SimHttp {
                 .setConfirmText(type == 1 ? "好的" : "")
                 .setOnConfirmClickListener(() -> {
                     if (type == 2) {
-                        PhoneManager.callOut(phone);
+                        SimPhoneManager.callOutBySim(phone);
                     }
                 }).show();
     }
