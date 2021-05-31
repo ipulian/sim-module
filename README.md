@@ -36,7 +36,7 @@ dependencies {
     SimHttp.getInstance().callPhoneBySim(String phone)
 ```
 - 2.主卡发送短信
-```
+```java
 SimPhoneManager.sendSms(String phone);
 //OR
 SimPhoneManager.sendSms(String phone,String content);
