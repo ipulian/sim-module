@@ -27,7 +27,6 @@ dependencies {
 - 1. 主卡外呼(需要先申请android.permission.CALL_PHONE权限)
 ```java
     
-   })
 ````
 或者通过RxJava3 的Observer 返回bindingInfo
 
