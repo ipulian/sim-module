@@ -2,12 +2,12 @@ package com.ipusoft.sim.repository;
 
 import android.util.Log;
 
-import com.ipusoft.base_class.BaseObserve;
-import com.ipusoft.base_class.constant.Constant;
+import com.ipusoft.context.base.IObserver;
+import com.ipusoft.context.bean.SysRecording;
+import com.ipusoft.context.db.DBManager;
 import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.GsonUtils;
-import com.ipusoft.database.bean.SysRecording;
-import com.ipusoft.database.manager.DBManager;
+import com.ipusoft.sim.constant.Constant;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class SysRecordingRepo {
     private static final String TAG = "SysRecordingRepository";
 
-    public static void queryByStatusForListPage(List<Integer> uploadStatus, BaseObserve<List<SysRecording>> observer) {
+    public static void queryByStatusForListPage(List<Integer> uploadStatus, IObserver<List<SysRecording>> observer) {
         DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -34,7 +34,7 @@ public class SysRecordingRepo {
     }
 
     public static void queryByStatus(List<Integer> uploadStatus, int retryCount, long currentTime,
-                                     BaseObserve<List<SysRecording>> observe) {
+                                     IObserver<List<SysRecording>> observe) {
         DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, retryCount, currentTime, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -42,7 +42,7 @@ public class SysRecordingRepo {
     }
 
     public static void queryByStatusForMainThread(List<Integer> uploadStatus, int retryCount, long currentTime,
-                                                  BaseObserve<List<SysRecording>> observe) {
+                                                  IObserver<List<SysRecording>> observe) {
         DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, retryCount, currentTime, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -86,7 +86,7 @@ public class SysRecordingRepo {
     }
 
     public static void updateRecordingStatusByKey(SysRecording recording, int status,
-                                                  BaseObserve<SysRecording> observe) {
+                                                  IObserver<SysRecording> observe) {
         Observable.create((ObservableOnSubscribe<SysRecording>) emitter -> {
             recording.setUploadStatus(status);
             DBManager.getSysRecordingDao().updateRecording(recording);
@@ -98,7 +98,7 @@ public class SysRecordingRepo {
     }
 
     public static void updateRecordingStatusByKey2(SysRecording recording, int status,
-                                                   BaseObserve<SysRecording> observe) {
+                                                   IObserver<SysRecording> observe) {
         Observable.create((ObservableOnSubscribe<SysRecording>) emitter -> {
             recording.setUploadStatus(status);
             DBManager.getSysRecordingDao().updateRecording(recording);
@@ -109,7 +109,7 @@ public class SysRecordingRepo {
 
 
     public static void updateRecordingStatusByKey(SysRecording recording, int status) {
-        updateRecordingStatusByKey(recording, status, new BaseObserve<SysRecording>() {
+        updateRecordingStatusByKey(recording, status, new IObserver<SysRecording>() {
             @Override
             public void onNext(@NonNull SysRecording sysRecording) {
 
@@ -117,7 +117,7 @@ public class SysRecordingRepo {
         });
     }
 
-    public static void updateRecording(SysRecording recording, BaseObserve<Boolean> observe) {
+    public static void updateRecording(SysRecording recording, IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             DBManager.getSysRecordingDao().updateRecording(recording);
             emitter.onNext(true);
@@ -127,7 +127,7 @@ public class SysRecordingRepo {
                 .subscribe(observe);
     }
 
-    public static void updateRecordingList(List<SysRecording> list, BaseObserve<Boolean> observe) {
+    public static void updateRecordingList(List<SysRecording> list, IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             DBManager.getSysRecordingDao().updateStatusList(list);
             emitter.onNext(true);
@@ -137,7 +137,7 @@ public class SysRecordingRepo {
                 .subscribe(observe);
     }
 
-    public static void deleteOldRecording(List<Integer> statusList, long timestamp, BaseObserve<Boolean> observe) {
+    public static void deleteOldRecording(List<Integer> statusList, long timestamp, IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             DBManager.getSysRecordingDao().deleteOldRecording(timestamp, statusList);
             emitter.onNext(true);

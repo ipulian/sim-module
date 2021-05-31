@@ -1,7 +1,6 @@
 package com.ipusoft.sim.bean;
 
-import com.ipusoft.base_class.bean.base.BaseHttpResponse;
-import com.ipusoft.base_class.bean.Customer;
+import com.ipusoft.context.bean.base.BaseHttpResponse;
 
 /**
  * author : GWFan
@@ -9,7 +8,7 @@ import com.ipusoft.base_class.bean.Customer;
  * desc   :
  */
 
-public class SimRiskControl extends BaseHttpResponse {
+public abstract class SimRiskControlBean extends BaseHttpResponse {
     /*
      * 0直接外呼  1无法外呼提示msg  2提示msg，提供继续外呼和取消外呼
      */
@@ -18,10 +17,6 @@ public class SimRiskControl extends BaseHttpResponse {
      * 外呼号码
      */
     private String phone;
-
-    private Customer customer;
-
-    private String isClue;
 
     public int getType() {
         return type;
@@ -37,21 +32,5 @@ public class SimRiskControl extends BaseHttpResponse {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public String getIsClue() {
-        return isClue;
-    }
-
-    public void setIsClue(String isClue) {
-        this.isClue = isClue;
     }
 }

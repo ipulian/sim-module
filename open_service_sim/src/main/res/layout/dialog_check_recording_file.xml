@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/service_permission_bg_alert_dialog">
+    android:background="@drawable/sim_bg_alert_dialog">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="@drawable/service_permission_btn_go_to_open"
+                    android:background="@drawable/sim_btn_go_to_open"
                     android:gravity="center"
                     android:text="确定"
                     android:textColor="@color/white"

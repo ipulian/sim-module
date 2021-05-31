@@ -31,4 +31,9 @@ public class StorageConstant {
      * 主卡外呼时间
      */
     public static final String SIM_OUT_CALL_BEAN = "sim_out_call_bean";
+
+    /**
+     * 上次提示检查录音功能的时间
+     */
+    public static final String LAST_SHOW_RECORDING_PERMISSION_DIALOG_TIME = "last_show_recording_permission_dialog_time";
 }

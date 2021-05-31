@@ -1,6 +1,6 @@
 package com.ipusoft.sim.bean;
 
-import com.ipusoft.base_class.bean.base.BaseHttpResponse;
+import com.ipusoft.context.bean.base.BaseHttpResponse;
 
 /**
  * author : GWFan

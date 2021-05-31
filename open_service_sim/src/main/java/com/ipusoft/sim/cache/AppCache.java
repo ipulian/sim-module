@@ -1,6 +1,7 @@
 package com.ipusoft.sim.cache;
 
-import com.ipusoft.database.bean.SysRecording;
+
+import com.ipusoft.context.bean.SysRecording;
 
 import java.util.ArrayList;
 import java.util.List;

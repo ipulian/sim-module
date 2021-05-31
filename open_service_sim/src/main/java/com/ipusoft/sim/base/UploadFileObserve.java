@@ -1,6 +1,6 @@
 package com.ipusoft.sim.base;
 
-import com.ipusoft.base_class.BaseHttpObserve;
+import com.ipusoft.context.base.IObserver;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * desc   : 文件上传的Observe
  */
 
-public abstract class UploadFileObserve<T> extends BaseHttpObserve<T> {
+public abstract class UploadFileObserve<T> extends IObserver<T> {
     private static final String TAG = "UploadFileObserve";
 
     @Override

@@ -1,17 +1,17 @@
 package com.ipusoft.sim.http;
 
-import com.ipusoft.base_class.BaseHttpObserve;
-import com.ipusoft.base_class.bean.Customer;
-import com.ipusoft.base_class.constant.HttpStatus;
-import com.ipusoft.base_communication.NativeInterface;
-import com.ipusoft.component.dialog.IAlertDialog;
-import com.ipusoft.context.IActivityLifecycle;
-import com.ipusoft.context.utils.StringUtils;
-import com.ipusoft.network.RequestMap;
-import com.ipusoft.sim.bean.SimRiskControl;
-import com.ipusoft.sim.module.SIMService;
+import android.widget.Toast;
 
-import io.reactivex.rxjava3.annotations.NonNull;
+import com.ipusoft.context.IActivityLifecycle;
+import com.ipusoft.context.IpuSoftSDK;
+import com.ipusoft.sim.bean.SimRiskControlBean;
+import com.ipusoft.sim.component.IAlertDialog;
+import com.ipusoft.sim.iface.OnSimCallPhoneResultListener;
+import com.ipusoft.sim.iface.SimConstant;
+import com.ipusoft.sim.manager.PhoneManager;
+import com.ipusoft.sim.module.SimService;
+
+import java.util.HashMap;
 
 /**
  * author : GWFan
@@ -20,99 +20,75 @@ import io.reactivex.rxjava3.annotations.NonNull;
  */
 
 public class SimHttp {
-    private static final String TAG = "SimHttpRequest";
-    /*
-     * 0直接外呼  1无法外呼提示msg  2提示msg，提供继续外呼和取消外呼
-     */
-    private static final int TYPE_0 = 0;
-    private static final int TYPE_1 = 1;
-    private static final int TYPE_2 = 2;
+    private static final String TAG = "SimHttp";
 
-    public interface OnSimCallInfoListener {
-        void onSimCallInfo(String type, Customer customer);
+    private SimHttp() {
+    }
+
+    private static class SimHttpHolder {
+        private static final SimHttp INSTANCE = new SimHttp();
+    }
+
+    public static SimHttp getInstance() {
+        return SimHttpHolder.INSTANCE;
     }
 
     /**
-     * 主卡外呼风控
+     * 主卡外呼风控查询，由调用者处理查询结果
      */
-    public static void querySimRiskControl(String phone, BaseHttpObserve<SimRiskControl> observer) {
-        RequestMap requestMap = RequestMap.getRequestMap();
+    public void callPhoneBySim(String phone, OnSimCallPhoneResultListener<SimRiskControlBean> listener) {
+        HashMap<String, Object> requestMap = new HashMap<>();
+        requestMap.put("token", IpuSoftSDK.getToken());
         requestMap.put("phone", phone);
-        SIMService.Companion.simCallPhone(requestMap, observer);
+        SimService.getInstance()
+                .simCallPhone(requestMap, SimRiskControlBean.class, listener);
     }
 
-    public static void querySimRiskControl(String phone) {
-        RequestMap requestMap = RequestMap.getRequestMap();
+    /**
+     * SDK自动处理查询结果：受风控，Dialog提示，否则，直接外呼
+     *
+     * @param phone
+     */
+    public void callPhoneBySim(String phone) {
+        HashMap<String, Object> requestMap = new HashMap<>();
+        requestMap.put("token", IpuSoftSDK.getToken());
         requestMap.put("phone", phone);
-        SIMService.Companion.simCallPhone(requestMap, new BaseHttpObserve<SimRiskControl>() {
-            @Override
-            public void onNext(@NonNull SimRiskControl simRiskControl) {
-                String status = simRiskControl.getStatus();
-                if (StringUtils.equals(HttpStatus.SUCCESS, status)) {
-                    int type = simRiskControl.getType();
-                    String msg = simRiskControl.getMsg();
-                    if (TYPE_1 == type || TYPE_2 == type) {
-                        //showRiskControlDialog(type, msg, phone);
-                    } else {
-                        NativeInterface.callOutBySim(phone);
-                    }
-                } else if (StringUtils.equals(HttpStatus.EXPIRED, status)) {
-
-                } else {
-                    NativeInterface.callOutBySim(phone);
-                }
-            }
-        });
-    }
-
-    public static void querySimRiskControl(String phone, OnSimCallInfoListener listener) {
-        RequestMap requestMap = RequestMap.getRequestMap();
-        requestMap.put("phone", phone);
-        SIMService.Companion.simCallPhone(requestMap, new BaseHttpObserve<SimRiskControl>() {
-            @Override
-            public void onNext(@NonNull SimRiskControl simRiskControl) {
-                String status = simRiskControl.getStatus();
-                if (StringUtils.equals(HttpStatus.SUCCESS, status)) {
-                    int type = simRiskControl.getType();
-                    String msg = simRiskControl.getMsg();
-                    String isClue = simRiskControl.getIsClue();
-                    Customer customer = simRiskControl.getCustomer();
-                    if (TYPE_1 == type || TYPE_2 == type) {
-                        showRiskControlDialog(type, msg, phone, isClue, customer, listener);
-                    } else {
-                        if (listener != null) {
-                            listener.onSimCallInfo(isClue, customer);
+        SimService.getInstance()
+                .simCallPhone(requestMap, SimRiskControlBean.class, new OnSimCallPhoneResultListener<SimRiskControlBean>() {
+                    @Override
+                    public void onSucceed(SimRiskControlBean simRiskControlBean) {
+                        int type = simRiskControlBean.getType();
+                        if (SimConstant.TYPE_1 == type || SimConstant.TYPE_2 == type) {
+                            showRiskControlDialog(simRiskControlBean);
+                        } else {
+                            PhoneManager.callOut(phone);
                         }
                     }
-                }
-            }
-        });
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        Toast.makeText(IpuSoftSDK.getAppContext(), "查询出错", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-
-    public static void showRiskControlDialog(int type, String msg, String phone,
-                                             String isClue, Customer customer,
-                                             OnSimCallInfoListener listener) {
+    /**
+     * 风控提示的Dialog
+     *
+     * @param simRiskControlBean
+     */
+    private static void showRiskControlDialog(SimRiskControlBean simRiskControlBean) {
+        int type = simRiskControlBean.getType();
+        String msg = simRiskControlBean.getMsg();
+        String phone = simRiskControlBean.getPhone();
         IAlertDialog.getInstance(IActivityLifecycle.getCurrentActivity())
                 .setMsg(msg)
                 .setShowCancelBtn(type == 2)
                 .setConfirmText(type == 1 ? "好的" : "")
-                .setCancelableClickOutSide(false)
-                .setMyAlertClickListener(new IAlertDialog.OnMyAlertClickListener() {
-                    @Override
-                    public void onConfirm() {
-                        if (type == 2) {
-                            if (listener != null) {
-                                listener.onSimCallInfo(isClue, customer);
-                            }
-                        }
+                .setOnConfirmClickListener(() -> {
+                    if (type == 2) {
+                        PhoneManager.callOut(phone);
                     }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                })
-                .show();
+                }).show();
     }
 }

@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ipusoft.context.utils.GsonUtils;
 import com.ipusoft.context.utils.StringUtils;
-import com.ipusoft.database.bean.SIMCallOutBean;
-import com.ipusoft.database.bean.UploadSysRecordingBean;
+import com.ipusoft.sim.bean.SIMCallOutBean;
+import com.ipusoft.sim.bean.UploadSysRecordingBean;
 import com.ipusoft.sim.constant.StorageConstant;
 
 import java.util.ArrayList;
@@ -127,10 +127,10 @@ public class SimDataRepo {
     }
 
     public static void setLastShowCheckRecordingPermissionDialog(long timestamp) {
-        SIMModuleMMKV.set(com.ipusoft.base_class.constant.StorageConstant.LAST_SHOW_RECORDING_PERMISSION_DIALOG_TIME, timestamp);
+        SIMModuleMMKV.set(StorageConstant.LAST_SHOW_RECORDING_PERMISSION_DIALOG_TIME, timestamp);
     }
 
     public static long getLastShowCheckRecordingPermissionDialog() {
-        return SIMModuleMMKV.getLong(com.ipusoft.base_class.constant.StorageConstant.LAST_SHOW_RECORDING_PERMISSION_DIALOG_TIME);
+        return SIMModuleMMKV.getLong(StorageConstant.LAST_SHOW_RECORDING_PERMISSION_DIALOG_TIME);
     }
 }

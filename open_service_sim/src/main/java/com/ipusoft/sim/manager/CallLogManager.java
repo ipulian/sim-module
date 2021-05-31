@@ -2,17 +2,17 @@ package com.ipusoft.sim.manager;
 
 import android.util.Log;
 
-import com.ipusoft.base_class.BaseObserve;
-import com.ipusoft.base_communication.constant.CallTypeConfig;
 import com.ipusoft.context.IActivityLifecycle;
 import com.ipusoft.context.IpuSoftSDK;
+import com.ipusoft.context.base.IObserver;
+import com.ipusoft.context.bean.SysRecording;
+import com.ipusoft.context.constant.CallTypeConfig;
 import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.GsonUtils;
 import com.ipusoft.context.utils.StringUtils;
 import com.ipusoft.context.utils.ThreadUtils;
-import com.ipusoft.database.bean.SysRecording;
-import com.ipusoft.database.bean.UploadSysRecordingBean;
 import com.ipusoft.sim.bean.SysCallLog;
+import com.ipusoft.sim.bean.UploadSysRecordingBean;
 import com.ipusoft.sim.component.CheckRecordingFileDialog;
 import com.ipusoft.sim.constant.CallLogCallsType;
 import com.ipusoft.sim.constant.UploadStatus;
@@ -64,7 +64,7 @@ public class CallLogManager {
     /**
      * 查询通话记录合并录音
      */
-    public void queryCallLogAndRecording(BaseObserve<Boolean> observe) {
+    public void queryCallLogAndRecording(IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             List<SysRecording> list = new ArrayList<>();
             String localCallType = SimDataRepo.getLocalCallType();
@@ -72,7 +72,7 @@ public class CallLogManager {
             UploadSysRecordingBean uploadSysRecording = SimDataRepo.getUploadSysRecording();
             if (StringUtils.equals(CallTypeConfig.SIM.getType(), localCallType) && uploadSysCallLog.isFlag()) {
                 Log.d(TAG, "-------->5s后系统数据库中查数据");
-                CallLogRepo.getInstance().querySysCallLog(new BaseObserve<List<SysCallLog>>() {
+                CallLogRepo.getInstance().querySysCallLog(new IObserver<List<SysCallLog>>() {
                     @Override
                     public void onNext(@NonNull List<SysCallLog> sysCallLogs) {
                         boolean flag = false;
@@ -95,7 +95,7 @@ public class CallLogManager {
 //                        Log.d(TAG, "phoneList: -------->" + GsonUtils.toJson(phoneList));
                         if (uploadSysRecording.isFlag() && flag && ArrayUtils.isNotEmpty(phoneList)) {
                             long finalMaxTimestamp = maxTimestamp;
-                            RecordingFileRepo.getInstance().queryRecordingFile(new BaseObserve<List<File>>() {
+                            RecordingFileRepo.getInstance().queryRecordingFile(new IObserver<List<File>>() {
                                 @Override
                                 public void onNext(@NonNull List<File> files) {
                                     Map<String, File> fileMap = new HashMap<>();// 联系人号码+时间和录音文件的map
@@ -188,7 +188,7 @@ public class CallLogManager {
                                     /**
                                      * 加入任务队列
                                      */
-                                    UploadManager.addRecordingList2Task(list);
+                                    UploadManager.getInstance().addRecordingList2Task(list);
 
                                     emitter.onNext(true);
                                     emitter.onComplete();
@@ -238,7 +238,7 @@ public class CallLogManager {
                             /**
                              * 加入任务队列
                              */
-                            UploadManager.addRecordingList2Task(list);
+                            UploadManager.getInstance().addRecordingList2Task(list);
 
                             emitter.onNext(true);
                             emitter.onComplete();

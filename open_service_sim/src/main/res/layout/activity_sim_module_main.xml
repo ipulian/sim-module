@@ -3,27 +3,51 @@
 
     <data />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:onClick="showWindow"
-            android:text="显示悬浮窗" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:onClick="queryCallLog"
-            android:text="查询通话记录" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="match_parent"
+                android:layout_height="500dp" />
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:onClick="uploadTest"
+                android:text="上传测试" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:onClick="queryCallLog"
+                android:text="查询通话记录" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:onClick="help"
+                android:text="帮助" />
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

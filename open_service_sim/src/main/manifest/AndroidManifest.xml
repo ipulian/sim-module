@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ipusoft.sim">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application>
-        <activity android:name=".SimMainActivity" />
+        <activity android:name=".debug.SimMainActivity" />
         <activity android:name=".view.HowToOpenRecordingActivity" />
     </application>
 

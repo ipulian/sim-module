@@ -4,14 +4,14 @@ import android.database.Cursor;
 import android.provider.CallLog;
 import android.util.Log;
 
-import com.ipusoft.base_communication.constant.CallTypeConfig;
 import com.ipusoft.context.IpuSoftSDK;
+import com.ipusoft.context.constant.CallTypeConfig;
 import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.PlatformUtils;
 import com.ipusoft.context.utils.StringUtils;
-import com.ipusoft.database.bean.SIMCallOutBean;
-import com.ipusoft.database.bean.UploadSysRecordingBean;
+import com.ipusoft.sim.bean.SIMCallOutBean;
 import com.ipusoft.sim.bean.SysCallLog;
+import com.ipusoft.sim.bean.UploadSysRecordingBean;
 import com.ipusoft.sim.constant.CallLogCallsType;
 import com.ipusoft.sim.constant.CallLogType;
 import com.ipusoft.sim.datastore.SimDataRepo;

@@ -2,11 +2,11 @@ package com.ipusoft.sim.repository;
 
 import android.os.Environment;
 
-import com.ipusoft.base_class.constant.Constant;
 import com.ipusoft.context.IpuSoftSDK;
 import com.ipusoft.context.utils.StringUtils;
-import com.ipusoft.database.bean.UploadSysRecordingBean;
+import com.ipusoft.sim.bean.UploadSysRecordingBean;
 import com.ipusoft.sim.constant.AudioExpandedName;
+import com.ipusoft.sim.constant.Constant;
 import com.ipusoft.sim.datastore.SimDataRepo;
 import com.ipusoft.sim.utils.FileUtilsKt;
 

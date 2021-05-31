@@ -1,59 +1,34 @@
-if (rootProject.ext.android.isApplication) {
+def isApp = false
+if (isApp) {
     apply plugin: 'com.android.application'
 } else {
     apply plugin: 'com.android.library'
 }
 
-apply plugin: 'maven'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-def mAndroid = rootProject.ext.android
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.team.github@51lianlian.com'
 
 android {
-    compileSdkVersion mAndroid.compileSdkVersion
-    buildToolsVersion mAndroid.buildToolsVersion
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
-        if (mAndroid.isApplication) {
+        if (isApp) {
             applicationId "com.ipusoft.simmodule"
         }
-        minSdkVersion mAndroid.minSdkVersion
-        targetSdkVersion mAndroid.targetSdkVersion
-        versionCode mAndroid.versionCode
-        versionName mAndroid.versionName
-
-        testInstrumentationRunner mAndroid.testInstrumentationRunner
-        consumerProguardFiles "consumer-rules.pro"
-
-        flavorDimensions "open_service_sim"
-
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [
-                        "room.schemaLocation": "$projectDir/schemas".toString(),
-                        AROUTER_MODULE_NAME  : project.getName()
-                ]
+                arguments = [AROUTER_MODULE_NAME: this.project.getName()]
             }
-        }
-    }
-    productFlavors {
-        pro {
-            dimension 'open_service_sim'
-            missingDimensionStrategy "network", "pro"
-        }
-        dev {
-            dimension 'open_service_sim'
-            missingDimensionStrategy "network", "dev"
-        }
-        ct {
-            dimension 'open_service_sim'
-            missingDimensionStrategy "network", "ct"
-        }
-        hx {
-            dimension 'open_service_sim'
-            missingDimensionStrategy "network", "hx"
         }
     }
     buildTypes {
@@ -70,50 +45,30 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-
     sourceSets {
         main {
-            if (mAndroid.isApplication) {
+            if (isApp) {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
-                //java.srcDir 'src/main/module'
+                java.srcDir 'src/main/debug'
             } else {
                 manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
-                java {
-                    exclude '**/debug/**'
-                }
             }
         }
     }
-
     buildFeatures { dataBinding = true }
 }
 
 dependencies {
-    autoDepends(this.project)
-}
-
-repositories {
-    mavenCentral()
-}
-
-uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-//            snapshotRepository(url: MAVEN_REPO_SNAPSHOT_URL) {
-//                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
-//            }
-            repository(url: MAVEN_REPO_RELEASE_URL) {
-                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
-            }
-            pom.project {
-                version '1.0.0'
-                artifactId ARTIFACT_ID
-                groupId GROUP_ID
-                packaging TYPE
-                description "更新描述"
-            }
-        }
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.5.1'
+    if (isApp) {
+        implementation project(":context:context")
+    } else {
+        implementation 'com.github.ipulian:ipusdk:1.6.13.7'
     }
 }

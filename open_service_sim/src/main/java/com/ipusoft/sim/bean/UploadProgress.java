@@ -1,6 +1,7 @@
 package com.ipusoft.sim.bean;
 
-import com.ipusoft.database.bean.SysRecording;
+
+import com.ipusoft.context.bean.SysRecording;
 
 import java.io.Serializable;
 

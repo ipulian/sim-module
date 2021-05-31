@@ -1,6 +1,6 @@
 package com.ipusoft.sim.upload;
 
-import com.ipusoft.database.bean.SysRecording;
+import com.ipusoft.context.bean.SysRecording;
 import com.ipusoft.sim.base.UploadFileObserve;
 import com.ipusoft.sim.bean.UploadResponse;
 
@@ -47,7 +47,6 @@ public class UploadFileRequestBody extends RequestBody {
 
     @Override
     public boolean isOneShot() {
-        super.isOneShot();
         return true;
     }
 
