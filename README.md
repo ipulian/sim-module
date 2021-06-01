@@ -3,7 +3,7 @@
 有一些公共方法，在IpuSDK中已经做了说明，这里不再赘述。
 首先可以通过 https://github.com/ipulian/sim-module.git 把该项目在Android Studio中直接运行。
 ## Description
-集成主卡通讯的SDK后，在您的app内通过SDK外呼后，SDK会主动检查系统的外呼记录，并把该记录上传到服务器。如果不通过SDK外呼，则SDK不会读取该记录。
+集成主卡通讯的SDK后，在您的app内通过SDK外呼后，SDK会主动检查系统的外呼记录，并把该记录同步到SDK内。如果不通过SDK外呼，则SDK不会读取该记录。
 ## Setup
 ```gradle
 allprojects {
