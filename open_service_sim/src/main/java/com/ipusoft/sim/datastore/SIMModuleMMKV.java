@@ -14,7 +14,7 @@ import java.util.Set;
  * desc   :
  */
 
-public class SIMModuleMMKV {
+public class SIMModuleMMKV{
 
     private static final MMKV mv = MMKV.mmkvWithID(DSConfig.X_MODULE_DS);
 
@@ -104,16 +104,14 @@ public class SIMModuleMMKV {
     }
 
     /**
-     * 清除所有key
-     */
-    public static void clearAll() {
-        mv.clearAll();
-    }
-
-    /**
      * 判断是否含有某个key
      */
     public static boolean hasKey(String key) {
         return mv.containsKey(key);
+    }
+
+
+    public static void clearDataStore() {
+        mv.clearAll();
     }
 }

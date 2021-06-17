@@ -3,7 +3,8 @@ package com.ipusoft.sim.debug;
 import android.app.Application;
 
 import com.ipusoft.context.IpuSoftSDK;
-import com.ipusoft.context.bean.IAuthInfo;
+import com.ipusoft.context.bean.AuthInfo;
+import com.ipusoft.context.config.IEnv;
 
 /**
  * author : GWFan
@@ -18,6 +19,6 @@ public class MyApplication extends Application {
         String key = "4571122846924808";
         String secret = "90237f5970f805250f07fef18fff45cb";
         String username = "17047151254";
-        IpuSoftSDK.init(this, new IAuthInfo(key, secret, username));
+        IpuSoftSDK.init(this, IEnv.DEV, new AuthInfo(key, secret, username));
     }
 }

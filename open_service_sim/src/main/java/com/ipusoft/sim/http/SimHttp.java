@@ -4,14 +4,13 @@ import android.widget.Toast;
 
 import com.ipusoft.context.IActivityLifecycle;
 import com.ipusoft.context.IpuSoftSDK;
-import com.ipusoft.sim.bean.SimRiskControlBean;
+import com.ipusoft.http.RequestMap;
+import com.ipusoft.context.bean.SimRiskControlBean;
 import com.ipusoft.sim.component.IAlertDialog;
 import com.ipusoft.sim.iface.OnSimCallPhoneResultListener;
 import com.ipusoft.sim.iface.SimConstant;
 import com.ipusoft.sim.manager.SimPhoneManager;
 import com.ipusoft.sim.module.SimService;
-
-import java.util.HashMap;
 
 /**
  * author : GWFan
@@ -37,8 +36,7 @@ public class SimHttp {
      * 主卡外呼风控查询，由调用者处理查询结果
      */
     public void callPhoneBySim(String phone, OnSimCallPhoneResultListener<SimRiskControlBean> listener) {
-        HashMap<String, Object> requestMap = new HashMap<>();
-        requestMap.put("token", IpuSoftSDK.getToken());
+        RequestMap requestMap = RequestMap.getRequestMap();
         requestMap.put("phone", phone);
         SimService.getInstance()
                 .simCallPhone(requestMap, SimRiskControlBean.class, listener);
@@ -50,8 +48,7 @@ public class SimHttp {
      * @param phone
      */
     public void callPhoneBySim(String phone) {
-        HashMap<String, Object> requestMap = new HashMap<>();
-        requestMap.put("token", IpuSoftSDK.getToken());
+        RequestMap requestMap = RequestMap.getRequestMap();
         requestMap.put("phone", phone);
         SimService.getInstance()
                 .simCallPhone(requestMap, SimRiskControlBean.class, new OnSimCallPhoneResultListener<SimRiskControlBean>() {

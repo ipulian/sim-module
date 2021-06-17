@@ -3,10 +3,10 @@ package com.ipusoft.sim.ifaceimpl;
 import android.util.Log;
 
 import com.ipusoft.context.base.IObserver;
+import com.ipusoft.context.cache.AppCacheContext;
 import com.ipusoft.context.listener.OnPhoneStateChangedListener;
 import com.ipusoft.context.utils.StringUtils;
 import com.ipusoft.sim.bean.SIMCallOutBean;
-import com.ipusoft.sim.cache.AppCache;
 import com.ipusoft.sim.datastore.SimDataRepo;
 import com.ipusoft.sim.manager.CallLogManager;
 
@@ -23,12 +23,14 @@ public class OnPhoneStateChangedListenerImpl implements OnPhoneStateChangedListe
 
     @Override
     public void onDialingListener() {
-        String outCallNumber = AppCache.getOutCallNumber();
-        if (StringUtils.isNotEmpty(outCallNumber)) {
+        String simOutCallNumber = AppCacheContext.getSIMOutCallNumber();
+        if (StringUtils.isNotEmpty(simOutCallNumber)) {
             long l = System.currentTimeMillis();
-            SimDataRepo.addSIMCallOutBean(new SIMCallOutBean(outCallNumber, l));
-            AppCache.setSIMCallOutCallId(l);
-            AppCache.setOutCallNumber("");
+
+            SimDataRepo.addSIMCallOutBean(new SIMCallOutBean(simOutCallNumber, l));
+
+            AppCacheContext.setSIMCallOutCallId(l);
+            AppCacheContext.setSIMOutCallNumber("");
         }
     }
 

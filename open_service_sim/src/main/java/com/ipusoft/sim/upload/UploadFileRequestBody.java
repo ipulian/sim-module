@@ -46,11 +46,6 @@ public class UploadFileRequestBody extends RequestBody {
     }
 
     @Override
-    public boolean isOneShot() {
-        return true;
-    }
-
-    @Override
     public void writeTo(@NotNull BufferedSink sink) throws IOException {
         CountingSink countingSink = new CountingSink(sink);
         BufferedSink bufferedSink = Okio.buffer(countingSink);

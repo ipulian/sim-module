@@ -1,6 +1,6 @@
 package com.ipusoft.sim.http.base;
 
-import com.ipusoft.sim.bean.SimRiskControlBean;
+import com.ipusoft.context.bean.SimRiskControlBean;
 import com.ipusoft.sim.iface.OnSimCallPhoneResultListener;
 
 /**

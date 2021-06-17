@@ -19,7 +19,7 @@ import com.ipusoft.context.utils.FileUtilsKt;
 import com.ipusoft.context.utils.SizeUtils;
 import com.ipusoft.sim.R;
 import com.ipusoft.sim.bean.UploadProgress;
-import com.ipusoft.sim.databinding.ActivitySimModuleMainBinding;
+import com.ipusoft.sim.databinding.SimActivitySimModuleMainBinding;
 import com.ipusoft.sim.manager.UploadManager;
 import com.ipusoft.sim.view.HowToOpenRecordingActivity;
 
@@ -28,11 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SimMainActivity extends BaseActivity {
-    ActivitySimModuleMainBinding binding;
+    private SimActivitySimModuleMainBinding binding;
 
     @Override
     protected void initViewModel() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_sim_module_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.sim_activity_sim_module_main);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ipusoft.sim;
 
 import com.ipusoft.context.IpuSoftSDK;
+import com.ipusoft.sim.datastore.SimDataRepo;
 import com.ipusoft.sim.ifaceimpl.OnPhoneStateChangedListenerImpl;
 
 /**
@@ -12,6 +13,14 @@ import com.ipusoft.sim.ifaceimpl.OnPhoneStateChangedListenerImpl;
 public class SimModuleApp extends IpuSoftSDK {
     @Override
     public void initModule() {
-        IpuSoftSDK.setOnPhoneStatusChangedListener(new OnPhoneStateChangedListenerImpl());
+        /**
+         * 注册通话状态的listener
+         */
+        IpuSoftSDK.registerPhoneStatusChangedListener(new OnPhoneStateChangedListenerImpl());
+    }
+
+    @Override
+    public void unInitModule() {
+        SimDataRepo.clearAllData();
     }
 }

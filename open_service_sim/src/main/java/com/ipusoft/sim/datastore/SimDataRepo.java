@@ -18,19 +18,10 @@ import java.util.List;
  */
 
 public class SimDataRepo {
-    private static final String TAG = "LocalStorageUtils";
+    private static final String TAG = "SimDataRepo";
 
-    /**
-     * 本地通话方式
-     *
-     * @param str
-     */
-    public static void setLocalCallType(String str) {
-        SIMModuleMMKV.set(StorageConstant.LOCAL_CALL_TYPE, str);
-    }
-
-    public static String getLocalCallType() {
-        return SIMModuleMMKV.getString(StorageConstant.LOCAL_CALL_TYPE);
+    public static void clearAllData() {
+        SIMModuleMMKV.clearDataStore();
     }
 
     /**
@@ -123,6 +114,7 @@ public class SimDataRepo {
             simCallOutBeans = new Gson().fromJson(json, new TypeToken<List<SIMCallOutBean>>() {
             }.getType());
         }
+
         return simCallOutBeans;
     }
 

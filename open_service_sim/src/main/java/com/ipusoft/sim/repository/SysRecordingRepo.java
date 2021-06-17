@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.ipusoft.context.base.IObserver;
 import com.ipusoft.context.bean.SysRecording;
-import com.ipusoft.context.db.DBManager;
+import com.ipusoft.context.db.AppDBManager;
 import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.GsonUtils;
 import com.ipusoft.sim.constant.Constant;
@@ -31,7 +31,7 @@ public class SysRecordingRepo {
      * 查询等待上传的记录
      */
     public static void queryWaitingList(int page, IObserver<List<SysRecording>> observer) {
-        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(
+        AppDBManager.getSysRecordingDao().queryLimitRecordingByStatus(
                 ArrayUtils.createList(UploadStatus.WAIT_UPLOAD.getStatus()), page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -42,7 +42,7 @@ public class SysRecordingRepo {
      * 查询上传成功的记录
      */
     public static void querySucceedList(int page, IObserver<List<SysRecording>> observer) {
-        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(
+        AppDBManager.getSysRecordingDao().queryLimitRecordingByStatus(
                 ArrayUtils.createList(UploadStatus.UPLOAD_SUCCEED.getStatus()), page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -53,7 +53,7 @@ public class SysRecordingRepo {
      * 查询上传失败的记录
      */
     public static void queryFailedList(int page, IObserver<List<SysRecording>> observer) {
-        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(
+        AppDBManager.getSysRecordingDao().queryLimitRecordingByStatus(
                 ArrayUtils.createList(UploadStatus.UPLOAD_FAILED.getStatus()), page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -64,7 +64,7 @@ public class SysRecordingRepo {
      * 查询正在上传的记录
      */
     public static void queryUploadingList(int page, IObserver<List<SysRecording>> observer) {
-        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(
+        AppDBManager.getSysRecordingDao().queryLimitRecordingByStatus(
                 ArrayUtils.createList(UploadStatus.UPLOADING.getStatus()), page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -80,7 +80,7 @@ public class SysRecordingRepo {
      */
     public static void queryByStatusForListPage(List<Integer> uploadStatus, int page,
                                                 IObserver<List<SysRecording>> observer) {
-        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, 0)
+        AppDBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
@@ -88,7 +88,7 @@ public class SysRecordingRepo {
 
     public static void queryByStatusForListPage(List<Integer> uploadStatus,
                                                 IObserver<List<SysRecording>> observer) {
-        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, Constant.PAGE_SIZE)
+        AppDBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
@@ -97,7 +97,7 @@ public class SysRecordingRepo {
     public static void queryByStatus(List<Integer> uploadStatus, int retryCount,
                                      long currentTime,
                                      IObserver<List<SysRecording>> observe) {
-        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, retryCount, currentTime, Constant.PAGE_SIZE)
+        AppDBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, retryCount, currentTime, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observe);
@@ -106,7 +106,7 @@ public class SysRecordingRepo {
     public static void queryByStatusForMainThread(List<Integer> uploadStatus, int retryCount,
                                                   long currentTime,
                                                   IObserver<List<SysRecording>> observe) {
-        DBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, retryCount, currentTime, Constant.PAGE_SIZE)
+        AppDBManager.getSysRecordingDao().queryLimitRecordingByStatus(uploadStatus, retryCount, currentTime, Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observe);
@@ -114,7 +114,7 @@ public class SysRecordingRepo {
 
     public static void deleteRecording(SysRecording... recording) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter ->
-                DBManager.getSysRecordingDao().deleteRecording(recording))
+                AppDBManager.getSysRecordingDao().deleteRecording(recording))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
@@ -122,7 +122,7 @@ public class SysRecordingRepo {
 
     public static void deleteAllByStatus(int status) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter ->
-                DBManager.getSysRecordingDao().deleteRecording(status))
+                AppDBManager.getSysRecordingDao().deleteRecording(status))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
@@ -130,7 +130,7 @@ public class SysRecordingRepo {
 
     public static void deleteRecording(List<Long> callTimeList) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter ->
-                DBManager.getSysRecordingDao().deleteRecording(callTimeList))
+                AppDBManager.getSysRecordingDao().deleteRecording(callTimeList))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
@@ -140,7 +140,7 @@ public class SysRecordingRepo {
         if (ArrayUtils.isNotEmpty(list)) {
             Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
                 Log.d(TAG, "insert: ------->" + GsonUtils.toJson(list));
-                DBManager.getSysRecordingDao().insert(list);
+                AppDBManager.getSysRecordingDao().insert(list);
             })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -152,7 +152,7 @@ public class SysRecordingRepo {
                                                   IObserver<SysRecording> observe) {
         Observable.create((ObservableOnSubscribe<SysRecording>) emitter -> {
             recording.setUploadStatus(status);
-            DBManager.getSysRecordingDao().updateRecording(recording);
+            AppDBManager.getSysRecordingDao().updateRecording(recording);
             emitter.onNext(recording);
         })
                 .subscribeOn(Schedulers.io())
@@ -164,7 +164,7 @@ public class SysRecordingRepo {
                                                    IObserver<SysRecording> observe) {
         Observable.create((ObservableOnSubscribe<SysRecording>) emitter -> {
             recording.setUploadStatus(status);
-            DBManager.getSysRecordingDao().updateRecording(recording);
+            AppDBManager.getSysRecordingDao().updateRecording(recording);
             emitter.onNext(recording);
         })
                 .subscribe(observe);
@@ -182,7 +182,7 @@ public class SysRecordingRepo {
 
     public static void updateRecording(SysRecording recording, IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
-            DBManager.getSysRecordingDao().updateRecording(recording);
+            AppDBManager.getSysRecordingDao().updateRecording(recording);
             emitter.onNext(true);
         })
                 .subscribeOn(Schedulers.io())
@@ -193,7 +193,7 @@ public class SysRecordingRepo {
     public static void updateRecordingList
             (List<SysRecording> list, IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
-            DBManager.getSysRecordingDao().updateStatusList(list);
+            AppDBManager.getSysRecordingDao().updateStatusList(list);
             emitter.onNext(true);
         })
                 .subscribeOn(Schedulers.io())
@@ -204,7 +204,7 @@ public class SysRecordingRepo {
     public static void deleteOldRecording(List<Integer> statusList, long timestamp, IObserver<
             Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
-            DBManager.getSysRecordingDao().deleteOldRecording(timestamp, statusList);
+            AppDBManager.getSysRecordingDao().deleteOldRecording(timestamp, statusList);
             emitter.onNext(true);
         })
                 .subscribeOn(Schedulers.io())

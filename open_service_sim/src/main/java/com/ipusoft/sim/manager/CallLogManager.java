@@ -2,7 +2,6 @@ package com.ipusoft.sim.manager;
 
 import android.util.Log;
 
-import com.ipusoft.context.IActivityLifecycle;
 import com.ipusoft.context.IpuSoftSDK;
 import com.ipusoft.context.base.IObserver;
 import com.ipusoft.context.bean.SysRecording;
@@ -11,9 +10,10 @@ import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.GsonUtils;
 import com.ipusoft.context.utils.StringUtils;
 import com.ipusoft.context.utils.ThreadUtils;
+import com.ipusoft.mmkv.datastore.AppDataStore;
 import com.ipusoft.sim.bean.SysCallLog;
 import com.ipusoft.sim.bean.UploadSysRecordingBean;
-import com.ipusoft.sim.component.CheckRecordingFileDialog;
+import com.ipusoft.sim.component.HowToOpenRecordingDialog;
 import com.ipusoft.sim.constant.CallLogCallsType;
 import com.ipusoft.sim.constant.UploadStatus;
 import com.ipusoft.sim.datastore.SimDataRepo;
@@ -50,15 +50,12 @@ public class CallLogManager {
 
     }
 
+    private static class CallLogManagerHolder {
+        private static final CallLogManager INSTANCE = new CallLogManager();
+    }
+
     public static CallLogManager getInstance() {
-        if (instance == null) {
-            synchronized (CallLogManager.class) {
-                if (instance == null) {
-                    instance = new CallLogManager();
-                }
-            }
-        }
-        return instance;
+        return CallLogManagerHolder.INSTANCE;
     }
 
     /**
@@ -67,7 +64,7 @@ public class CallLogManager {
     public void queryCallLogAndRecording(IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             List<SysRecording> list = new ArrayList<>();
-            String localCallType = SimDataRepo.getLocalCallType();
+            String localCallType = AppDataStore.getLocalCallType();
             UploadSysRecordingBean uploadSysCallLog = SimDataRepo.getUploadSysCallLog();
             UploadSysRecordingBean uploadSysRecording = SimDataRepo.getUploadSysRecording();
             if (StringUtils.equals(CallTypeConfig.SIM.getType(), localCallType) && uploadSysCallLog.isFlag()) {
@@ -120,14 +117,15 @@ public class CallLogManager {
                                     String phoneNumber;
                                     long beginTime;
                                     int duration;
+                                    int callResult;
                                     Map<File, File> fileWaitToCopy = new HashMap<>();
-                                    boolean flag = false;
+                                    boolean isShow = false;
                                     for (SysCallLog callLog : sysCallLogs) {
                                         File file = null;
                                         phoneNumber = callLog.getPhoneNumber();
                                         beginTime = callLog.getBeginTime();//通话开始时间
                                         duration = callLog.getDuration();//通话时长
-
+                                        callResult = callLog.getCallResult();
                                         long minDiff = Long.MAX_VALUE;
                                         for (Map.Entry<String, File> entry : fileMap.entrySet()) {
                                             String phoneTime = entry.getKey();
@@ -150,7 +148,7 @@ public class CallLogManager {
                                         recording.setPhoneName(callLog.getName());
                                         recording.setPhoneNumber(phoneNumber);
                                         recording.setCallType(callLog.getCallType());
-                                        recording.setCallResult(callLog.getCallResult());
+                                        recording.setCallResult(callResult);
                                         if (callLog.getCallId() != 0) {
                                             recording.setCallId(callLog.getCallId());
                                         } else {
@@ -167,9 +165,9 @@ public class CallLogManager {
                                             fileWaitToCopy.put(file, nFile);
                                         } else {
                                             Log.d(TAG, "onNextthis:------> 1");
-                                            //未找到录音文件，或者用户没有打开录音功能
-                                            if (!flag) {
-                                                flag = true;
+                                            //已接通，但是未找到录音文件，或者用户没有打开录音功能
+                                            if (!isShow && (duration != 0 || callResult == 0)) {
+                                                isShow = true;
                                                 Log.d(TAG, "onNextthis:------> 2");
                                                 ThreadUtils.runOnUiThread(CallLogManager.this::showTipDialog);
                                             }
@@ -253,8 +251,6 @@ public class CallLogManager {
     }
 
     private void showTipDialog() {
-        CheckRecordingFileDialog
-                .getInstance(IActivityLifecycle.getCurrentActivity())
-                .show();
+        HowToOpenRecordingDialog.getInstance().show();
     }
 }

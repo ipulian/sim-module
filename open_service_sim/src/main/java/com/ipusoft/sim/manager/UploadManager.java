@@ -60,62 +60,32 @@ public class UploadManager {
                 temp.add(item);
             }
         }
+        addUploadTask(temp);
+    }
 
-        /**
-         * 如果上传队列中没有当前任务，将任务加入上传队列
-         */
-        SysRecordingRepo.updateRecordingList(temp, new IObserver<Boolean>() {
+    public void addRecording2Task(SysRecording sysRecording) {
+        addRecordingList2Task(ArrayUtils.createList(sysRecording));
+    }
+
+    private void addUploadTask(List<SysRecording> list) {
+        SysRecordingRepo.updateRecordingList(list, new IObserver<Boolean>() {
             @Override
             public void onNext(@NonNull Boolean aBoolean) {
-                for (SysRecording item : temp) {
-                    Log.d(TAG, "onNext: ----------》" + GsonUtils.toJson(item));
-                    addUploadTask(item);
+                for (SysRecording recording : list) {
+                    if (recording != null) {
+                        String absolutePath = recording.getAbsolutePath();
+                        if (StringUtils.isNotEmpty(absolutePath)) {
+                            File file = new File(recording.getAbsolutePath());
+                            if (!file.exists()) {
+                                return;
+                            }
+                        }
+                        ThreadPoolManager.newInstance().addExecuteTask(new UploadWorker(recording));
+                    }
                 }
             }
         });
     }
-
-    public void addRecording2Task(SysRecording sysRecording) {
-        if (sysRecording == null) {
-            return;
-        }
-        long fileSize = sysRecording.getFileSize();
-        if (fileSize > Constant.MAX_FILE_SIZE) {
-            return;
-        }
-        /**
-         * 如果上传队列中没有当前任务，将任务加入上传队列
-         */
-        if (AppCache.addFile2UploadTask(sysRecording)) {
-            SysRecordingRepo.updateRecordingStatusByKey(sysRecording, UploadStatus.WAIT_UPLOAD.getStatus(),
-                    new IObserver<SysRecording>() {
-                        @Override
-                        public void onNext(@NonNull SysRecording recording) {
-                            Log.d(TAG, "addUploadFile2Task: ------->加入队列");
-                            addUploadTask(recording);
-                        }
-                    });
-        }
-    }
-
-    private int i = 0;
-
-    private void addUploadTask(SysRecording sysRecording) {
-        i += 1;
-        Log.d(TAG, "addUploadTask: --------" + i);
-        if (sysRecording != null) {
-            String absolutePath = sysRecording.getAbsolutePath();
-            if (StringUtils.isNotEmpty(absolutePath)) {
-                File file = new File(sysRecording.getAbsolutePath());
-                if (!file.exists()) {
-                    return;
-                }
-            }
-
-            ThreadPoolManager.newInstance().addExecuteTask(new UploadWorker(sysRecording));
-        }
-    }
-
 }
 
 class UploadWorker implements Runnable {
@@ -171,7 +141,6 @@ class UploadWorker implements Runnable {
                 LiveDataBus.get().with("uploadProgress", UploadProgress.class).postValue(new UploadProgress(recording, progress));
             }
         };
-        Log.d(TAG, "executeUploadHttpTask: -------->zzzzz");
         UploadService.Companion.uploadRecordingFile(recording, uploadFileObserve);
     }
 

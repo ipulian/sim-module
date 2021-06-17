@@ -1,8 +1,8 @@
 package com.ipusoft.sim.module.base;
 
+import com.ipusoft.http.interceptors.base.BaseSimHttpInterceptor;
 import com.ipusoft.sim.iface.OnSimCallPhoneResultListener;
 import com.ipusoft.sim.interceptors.SimCallEventInterceptor;
-import com.ipusoft.sim.interceptors.base.BaseSimHttpInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;

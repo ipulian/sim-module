@@ -9,6 +9,7 @@ import com.ipusoft.context.constant.CallTypeConfig;
 import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.PlatformUtils;
 import com.ipusoft.context.utils.StringUtils;
+import com.ipusoft.mmkv.datastore.AppDataStore;
 import com.ipusoft.sim.bean.SIMCallOutBean;
 import com.ipusoft.sim.bean.SysCallLog;
 import com.ipusoft.sim.bean.UploadSysRecordingBean;
@@ -33,18 +34,15 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CallLogRepo {
     private static final String TAG = "CallLogRepository";
-    private static volatile CallLogRepo instance;
+
+    private static class CallLogRepoHolder {
+        private static final CallLogRepo INSTANCE = new CallLogRepo();
+    }
 
     public static CallLogRepo getInstance() {
-        if (instance == null) {
-            synchronized (CallLogRepo.class) {
-                if (instance == null) {
-                    instance = new CallLogRepo();
-                }
-            }
-        }
-        return instance;
+        return CallLogRepoHolder.INSTANCE;
     }
+
 
     public void querySysCallLog(Observer<List<SysCallLog>> observer) {
         Observable.create((ObservableOnSubscribe<List<SysCallLog>>) emitter
@@ -59,7 +57,7 @@ public class CallLogRepo {
 
     public List<SysCallLog> querySysCallLog() {
         ArrayList<SysCallLog> list = new ArrayList<>();
-        String localCallType = SimDataRepo.getLocalCallType();
+        String localCallType = AppDataStore.getLocalCallType();
         UploadSysRecordingBean uploadSysCallLog = SimDataRepo.getUploadSysCallLog();
         Log.d(TAG, "querySysCallLog: ------->" + localCallType + "---->" + uploadSysCallLog.isFlag());
         if (StringUtils.equals(CallTypeConfig.SIM.getType(), localCallType) && uploadSysCallLog.isFlag()) {

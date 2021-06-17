@@ -1,6 +1,6 @@
 package com.ipusoft.sim.api;
 
-import com.ipusoft.context.http.HttpConstant;
+import com.ipusoft.http.HttpConstant;
 import com.ipusoft.sim.bean.UploadResponse;
 
 import io.reactivex.rxjava3.core.Observable;

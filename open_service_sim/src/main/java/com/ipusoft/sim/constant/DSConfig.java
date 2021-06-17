@@ -10,5 +10,5 @@ public class DSConfig {
     /**
      * XModule DataStore
      */
-    public static final String X_MODULE_DS = "x_module_ds";
+    public static final String X_MODULE_DS = "sim_module_ds";
 }

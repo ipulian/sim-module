@@ -1,8 +1,6 @@
 package com.ipusoft.sim.upload;
 
-import android.util.Log;
-
-import com.ipusoft.context.IpuSoftSDK;
+import com.ipusoft.context.AppContext;
 import com.ipusoft.context.bean.SysRecording;
 import com.ipusoft.context.utils.StringUtils;
 import com.ipusoft.sim.base.UploadFileObserve;
@@ -63,8 +61,7 @@ public class MultipartBuilder {
             builder.addFormDataPart("duration", recording.getDuration() + "");
             builder.addFormDataPart("callResult", recording.getCallResult() + "");
             builder.addFormDataPart("callType", callType == 1 ? "2" : callType == 2 ? "1" : callType + "");
-            builder.addFormDataPart("token", IpuSoftSDK.getToken());
-            Log.d(TAG, "filesToMultipartBody: ------" + IpuSoftSDK.getToken());
+            builder.addFormDataPart("token", AppContext.getToken());
         }
         builder.setType(MultipartBody.FORM);
         return builder.build();

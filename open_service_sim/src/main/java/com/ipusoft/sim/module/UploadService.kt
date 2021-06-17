@@ -1,7 +1,7 @@
 package com.ipusoft.sim.module
 
 import com.ipusoft.context.bean.SysRecording
-import com.ipusoft.context.http.manager.OpenRetrofitManager
+import com.ipusoft.http.manager.RetrofitManager
 import com.ipusoft.sim.bean.UploadResponse
 import com.ipusoft.sim.api.SimAPIService
 import com.ipusoft.sim.base.UploadFileObserve
@@ -30,7 +30,7 @@ class UploadService {
          * 多文件上传
          */
         private fun uploadRecordingFiles(sysRecording: List<SysRecording>, uploadFileObserve: UploadFileObserve<UploadResponse>) {
-            OpenRetrofitManager.getInstance().retrofit.create(SimAPIService::class.java)
+            RetrofitManager.getInstance().retrofit.create(SimAPIService::class.java)
                     .uploadFile(MultipartBuilder.files2MultipartBody(sysRecording, uploadFileObserve))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

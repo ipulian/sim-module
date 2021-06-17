@@ -4,7 +4,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.ipusoft.context.BaseActivity;
 import com.ipusoft.sim.R;
-import com.ipusoft.sim.databinding.ActivityHowToOpenRecordingBinding;
+import com.ipusoft.sim.databinding.SimActivityHowToOpenRecordingBinding;
 
 /**
  * author : GWFan
@@ -13,11 +13,11 @@ import com.ipusoft.sim.databinding.ActivityHowToOpenRecordingBinding;
  */
 
 public class HowToOpenRecordingActivity extends BaseActivity {
-    private ActivityHowToOpenRecordingBinding binding;
+    private SimActivityHowToOpenRecordingBinding binding;
 
     @Override
     protected void initViewModel() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_how_to_open_recording);
+        binding = DataBindingUtil.setContentView(this, R.layout.sim_activity_how_to_open_recording);
     }
 
     @Override
