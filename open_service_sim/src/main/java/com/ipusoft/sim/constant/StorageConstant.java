@@ -7,10 +7,6 @@ package com.ipusoft.sim.constant;
  */
 
 public class StorageConstant {
-    /**
-     * 本地外呼类型
-     */
-    public static final String LOCAL_CALL_TYPE = "local_call_type";
 
     /**
      * 上传本地通话记录
@@ -36,4 +32,10 @@ public class StorageConstant {
      * 上次提示检查录音功能的时间
      */
     public static final String LAST_SHOW_RECORDING_PERMISSION_DIALOG_TIME = "last_show_recording_permission_dialog_time";
+
+    /**
+     * 上次清除过期数据的时间
+     */
+    public static final String LAST_TIMESTAMP_FOR_CLEAR_OUT_OF_DATE_RECORDING = "last_clear_recording";
+
 }

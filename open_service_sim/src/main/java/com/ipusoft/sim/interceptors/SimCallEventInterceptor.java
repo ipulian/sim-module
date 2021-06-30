@@ -1,6 +1,5 @@
 package com.ipusoft.sim.interceptors;
 
-import com.ipusoft.context.cache.AppCacheContext;
 import com.ipusoft.http.interceptors.base.BaseSimHttpInterceptor;
 
 import java.util.Map;
@@ -15,7 +14,10 @@ public class SimCallEventInterceptor extends BaseSimHttpInterceptor {
 
     @Override
     public void interceptor(Map<String, Object> params) {
-        String phone = (String) params.get("phone");
-        AppCacheContext.setSIMOutCallNumber(phone);
+        /*
+         * 该操作移到SimPhoneManager
+         */
+        //String phone = (String) params.get("phone");
+        //AppCacheContext.setSIMOutCallNumber(phone);
     }
 }

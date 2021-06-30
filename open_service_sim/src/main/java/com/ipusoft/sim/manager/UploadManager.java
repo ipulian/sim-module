@@ -6,6 +6,7 @@ import com.ipusoft.context.LiveDataBus;
 import com.ipusoft.context.base.IObserver;
 import com.ipusoft.context.bean.SysRecording;
 import com.ipusoft.context.constant.HttpStatus;
+import com.ipusoft.context.constant.LiveDataConstant;
 import com.ipusoft.context.manager.ThreadPoolManager;
 import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.GsonUtils;
@@ -13,7 +14,7 @@ import com.ipusoft.context.utils.StringUtils;
 import com.ipusoft.sim.base.UploadFileObserve;
 import com.ipusoft.sim.bean.UploadProgress;
 import com.ipusoft.sim.bean.UploadResponse;
-import com.ipusoft.sim.cache.AppCache;
+import com.ipusoft.sim.cache.SimAppCache;
 import com.ipusoft.sim.constant.Constant;
 import com.ipusoft.sim.constant.UploadStatus;
 import com.ipusoft.sim.module.UploadService;
@@ -55,7 +56,7 @@ public class UploadManager {
         for (int i = 0; i < list.size(); i++) {
             SysRecording item = list.get(i);
             long fileSize = item.getFileSize();
-            if (fileSize <= Constant.MAX_FILE_SIZE && AppCache.addFile2UploadTask(item)) {
+            if (fileSize <= Constant.MAX_FILE_SIZE && SimAppCache.addFile2UploadTask(item)) {
                 item.setUploadStatus(UploadStatus.WAIT_UPLOAD.getStatus());
                 temp.add(item);
             }
@@ -137,8 +138,7 @@ class UploadWorker implements Runnable {
 
             @Override
             public void onProgress(int progress) {
-                Log.d(TAG, "onProgress: ----" + progress);
-                LiveDataBus.get().with("uploadProgress", UploadProgress.class).postValue(new UploadProgress(recording, progress));
+                LiveDataBus.get().with(LiveDataConstant.UPLOAD_PROGRESS, UploadProgress.class).postValue(new UploadProgress(recording, progress));
             }
         };
         UploadService.Companion.uploadRecordingFile(recording, uploadFileObserve);
@@ -156,7 +156,7 @@ class UploadWorker implements Runnable {
                     new IObserver<SysRecording>() {
                         @Override
                         public void onNext(@NonNull SysRecording sysRecording) {
-                            AppCache.removeTaskFromQueue(sysRecording);
+                            SimAppCache.removeTaskFromQueue(sysRecording);
                         }
                     });
         }
@@ -174,7 +174,7 @@ class UploadWorker implements Runnable {
         SysRecordingRepo.updateRecording(recording, new IObserver<Boolean>() {
             @Override
             public void onNext(@NonNull Boolean aBoolean) {
-                AppCache.removeTaskFromQueue(recording);
+                SimAppCache.removeTaskFromQueue(recording);
             }
         });
     }

@@ -9,7 +9,7 @@ import com.ipusoft.context.constant.CallTypeConfig;
 import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.PlatformUtils;
 import com.ipusoft.context.utils.StringUtils;
-import com.ipusoft.mmkv.datastore.AppDataStore;
+import com.ipusoft.mmkv.datastore.CommonDataRepo;
 import com.ipusoft.sim.bean.SIMCallOutBean;
 import com.ipusoft.sim.bean.SysCallLog;
 import com.ipusoft.sim.bean.UploadSysRecordingBean;
@@ -57,7 +57,7 @@ public class CallLogRepo {
 
     public List<SysCallLog> querySysCallLog() {
         ArrayList<SysCallLog> list = new ArrayList<>();
-        String localCallType = AppDataStore.getLocalCallType();
+        String localCallType = CommonDataRepo.getLocalCallType();
         UploadSysRecordingBean uploadSysCallLog = SimDataRepo.getUploadSysCallLog();
         Log.d(TAG, "querySysCallLog: ------->" + localCallType + "---->" + uploadSysCallLog.isFlag());
         if (StringUtils.equals(CallTypeConfig.SIM.getType(), localCallType) && uploadSysCallLog.isFlag()) {

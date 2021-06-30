@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ipusoft.context.utils.GsonUtils;
 import com.ipusoft.context.utils.StringUtils;
+import com.ipusoft.mmkv.AccountMMKV;
 import com.ipusoft.sim.bean.SIMCallOutBean;
 import com.ipusoft.sim.bean.UploadSysRecordingBean;
 import com.ipusoft.sim.constant.StorageConstant;
@@ -118,11 +119,27 @@ public class SimDataRepo {
         return simCallOutBeans;
     }
 
+    /**
+     * 设置上次展示检查录音权限提示的时间
+     *
+     * @param timestamp
+     */
     public static void setLastShowCheckRecordingPermissionDialog(long timestamp) {
         SIMModuleMMKV.set(StorageConstant.LAST_SHOW_RECORDING_PERMISSION_DIALOG_TIME, timestamp);
     }
 
     public static long getLastShowCheckRecordingPermissionDialog() {
         return SIMModuleMMKV.getLong(StorageConstant.LAST_SHOW_RECORDING_PERMISSION_DIALOG_TIME);
+    }
+
+    /**
+     * 设置上次清除过期的通话录音的时间
+     */
+    public static void setLastClearOutOfDateRecordingTime(long timestamp) {
+        AccountMMKV.set(StorageConstant.LAST_TIMESTAMP_FOR_CLEAR_OUT_OF_DATE_RECORDING, timestamp);
+    }
+
+    public static long getLastClearOutOfDateRecordingTime() {
+        return AccountMMKV.getLong(StorageConstant.LAST_TIMESTAMP_FOR_CLEAR_OUT_OF_DATE_RECORDING, 0);
     }
 }

@@ -10,7 +10,7 @@ import com.ipusoft.context.utils.ArrayUtils;
 import com.ipusoft.context.utils.GsonUtils;
 import com.ipusoft.context.utils.StringUtils;
 import com.ipusoft.context.utils.ThreadUtils;
-import com.ipusoft.mmkv.datastore.AppDataStore;
+import com.ipusoft.mmkv.datastore.CommonDataRepo;
 import com.ipusoft.sim.bean.SysCallLog;
 import com.ipusoft.sim.bean.UploadSysRecordingBean;
 import com.ipusoft.sim.component.HowToOpenRecordingDialog;
@@ -44,7 +44,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CallLogManager {
     private static final String TAG = "CallLogManager";
-    private static CallLogManager instance;
 
     private CallLogManager() {
 
@@ -64,7 +63,7 @@ public class CallLogManager {
     public void queryCallLogAndRecording(IObserver<Boolean> observe) {
         Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             List<SysRecording> list = new ArrayList<>();
-            String localCallType = AppDataStore.getLocalCallType();
+            String localCallType = CommonDataRepo.getLocalCallType();
             UploadSysRecordingBean uploadSysCallLog = SimDataRepo.getUploadSysCallLog();
             UploadSysRecordingBean uploadSysRecording = SimDataRepo.getUploadSysRecording();
             if (StringUtils.equals(CallTypeConfig.SIM.getType(), localCallType) && uploadSysCallLog.isFlag()) {
@@ -164,11 +163,12 @@ public class CallLogManager {
                                             recording.setFileMD5(FileUtilsKt.getFileMD5ToString(file));
                                             fileWaitToCopy.put(file, nFile);
                                         } else {
-                                            Log.d(TAG, "onNextthis:------> 1");
+                                            Log.d(TAG, "onNext: ==-=====》" + duration);
+                                            Log.d(TAG, "onNext: ==-=====》" + callResult);
                                             //已接通，但是未找到录音文件，或者用户没有打开录音功能
                                             if (!isShow && (duration != 0 || callResult == 0)) {
                                                 isShow = true;
-                                                Log.d(TAG, "onNextthis:------> 2");
+                                                Log.d(TAG, "onNextthis:------> zzzzzzz");
                                                 ThreadUtils.runOnUiThread(CallLogManager.this::showTipDialog);
                                             }
                                         }

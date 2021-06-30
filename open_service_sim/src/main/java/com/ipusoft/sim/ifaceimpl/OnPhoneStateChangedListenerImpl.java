@@ -1,7 +1,5 @@
 package com.ipusoft.sim.ifaceimpl;
 
-import android.util.Log;
-
 import com.ipusoft.context.base.IObserver;
 import com.ipusoft.context.cache.AppCacheContext;
 import com.ipusoft.context.listener.OnPhoneStateChangedListener;
@@ -23,6 +21,7 @@ public class OnPhoneStateChangedListenerImpl implements OnPhoneStateChangedListe
 
     @Override
     public void onDialingListener() {
+
         String simOutCallNumber = AppCacheContext.getSIMOutCallNumber();
         if (StringUtils.isNotEmpty(simOutCallNumber)) {
             long l = System.currentTimeMillis();
@@ -46,7 +45,6 @@ public class OnPhoneStateChangedListenerImpl implements OnPhoneStateChangedListe
 
     @Override
     public void onDisConnectedListener() {
-        Log.d(TAG, "onDialingListener: ------------->onDisConnected");
         CallLogManager.getInstance().queryCallLogAndRecording(new IObserver<Boolean>() {
             @Override
             public void onNext(@NonNull Boolean aBoolean) {

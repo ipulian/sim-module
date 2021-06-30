@@ -12,7 +12,7 @@ import java.util.List;
  * desc   :
  */
 
-public class AppCache {
+public class SimAppCache {
     private static final String TAG = "AppCache";
 
     /**

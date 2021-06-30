@@ -4,12 +4,12 @@ import android.widget.Toast;
 
 import com.ipusoft.context.IActivityLifecycle;
 import com.ipusoft.context.IpuSoftSDK;
-import com.ipusoft.http.RequestMap;
 import com.ipusoft.context.bean.SimRiskControlBean;
+import com.ipusoft.context.manager.PhoneManager;
+import com.ipusoft.http.RequestMap;
 import com.ipusoft.sim.component.IAlertDialog;
 import com.ipusoft.sim.iface.OnSimCallPhoneResultListener;
 import com.ipusoft.sim.iface.SimConstant;
-import com.ipusoft.sim.manager.SimPhoneManager;
 import com.ipusoft.sim.module.SimService;
 
 /**
@@ -58,7 +58,7 @@ public class SimHttp {
                         if (SimConstant.TYPE_1 == type || SimConstant.TYPE_2 == type) {
                             showRiskControlDialog(simRiskControlBean);
                         } else {
-                            SimPhoneManager.callOutBySim(phone);
+                            PhoneManager.callPhoneBySim(phone);
                         }
                     }
 
@@ -84,7 +84,7 @@ public class SimHttp {
                 .setConfirmText(type == 1 ? "好的" : "")
                 .setOnConfirmClickListener(() -> {
                     if (type == 2) {
-                        SimPhoneManager.callOutBySim(phone);
+                        PhoneManager.callPhoneBySim(phone);
                     }
                 }).show();
     }

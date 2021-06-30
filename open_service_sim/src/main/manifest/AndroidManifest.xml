@@ -8,6 +8,10 @@
     <application>
         <activity android:name=".debug.SimMainActivity" />
         <activity android:name=".view.HowToOpenRecordingActivity" />
+
+        <service
+            android:name="com.ipusoft.sim.service.WHCoreService"
+            android:exported="false" />
     </application>
 
 </manifest>
