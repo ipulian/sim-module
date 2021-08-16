@@ -1,16 +1,15 @@
 package com.ipusoft.sim;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.ipusoft.context.AppContext;
 import com.ipusoft.context.AppManager;
 import com.ipusoft.context.IpuSoftSDK;
 import com.ipusoft.context.ServiceManager;
-import com.ipusoft.context.utils.StringUtils;
-import com.ipusoft.sim.datastore.SimDataRepo;
+import com.ipusoft.localcall.datastore.SimDataRepo;
+import com.ipusoft.localcall.service.AppCoreService;
 import com.ipusoft.sim.ifaceimpl.OnPhoneStateChangedListenerImpl;
-import com.ipusoft.sim.service.WHCoreService;
+import com.ipusoft.utils.StringUtils;
 
 /**
  * author : GWFan
@@ -29,12 +28,11 @@ public class SimModuleApp extends IpuSoftSDK {
         IpuSoftSDK.registerPhoneStatusChangedListener(new OnPhoneStateChangedListenerImpl());
 
         boolean runningForeground = AppManager.isRunningForeground(AppContext.getAppContext());
-        Log.d(TAG, "initModule: ----->" + runningForeground);
-        boolean serviceRunning = ServiceManager.isServiceRunning(WHCoreService.class);
+        boolean serviceRunning = ServiceManager.isServiceRunning(AppCoreService.class);
         if (runningForeground && !serviceRunning) {
             String token = AppContext.getToken();
             if (StringUtils.isNotEmpty(token)) {
-                AppContext.getAppContext().startService(new Intent(AppContext.getAppContext(), WHCoreService.class));
+                AppContext.getAppContext().startService(new Intent(AppContext.getAppContext(), AppCoreService.class));
             }
         }
     }

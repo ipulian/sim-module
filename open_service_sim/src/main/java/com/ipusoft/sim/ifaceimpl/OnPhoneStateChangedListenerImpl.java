@@ -3,10 +3,12 @@ package com.ipusoft.sim.ifaceimpl;
 import com.ipusoft.context.base.IObserver;
 import com.ipusoft.context.cache.AppCacheContext;
 import com.ipusoft.context.listener.OnPhoneStateChangedListener;
-import com.ipusoft.context.utils.StringUtils;
-import com.ipusoft.sim.bean.SIMCallOutBean;
-import com.ipusoft.sim.datastore.SimDataRepo;
-import com.ipusoft.sim.manager.CallLogManager;
+import com.ipusoft.localcall.bean.SIMCallOutBean;
+import com.ipusoft.localcall.datastore.SimDataRepo;
+import com.ipusoft.localcall.manager.CallLogManager;
+import com.ipusoft.logger.XLogger;
+
+import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 
@@ -21,33 +23,32 @@ public class OnPhoneStateChangedListenerImpl implements OnPhoneStateChangedListe
 
     @Override
     public void onDialingListener() {
-
-        String simOutCallNumber = AppCacheContext.getSIMOutCallNumber();
-        if (StringUtils.isNotEmpty(simOutCallNumber)) {
+        XLogger.d("OnPhoneStateChangedListenerImpl->Dialing");
+        SIMCallOutBean simCallOutBean = AppCacheContext.getSIMCallOutBean();
+        if (simCallOutBean != null) {
             long l = System.currentTimeMillis();
-
-            SimDataRepo.addSIMCallOutBean(new SIMCallOutBean(simOutCallNumber, l));
-
+            SimDataRepo.addSIMCallOutBean(new SIMCallOutBean(simCallOutBean.getPhone(), simCallOutBean.getCallTime(), l));
             AppCacheContext.setSIMCallOutCallId(l);
-            AppCacheContext.setSIMOutCallNumber("");
+            AppCacheContext.setSIMCallOutBean(null);
         }
     }
 
     @Override
     public void onInComingListener() {
-
+        XLogger.d("OnPhoneStateChangedListenerImpl->InComing");
     }
 
     @Override
     public void onConnectedListener() {
-
+        XLogger.d("OnPhoneStateChangedListenerImpl->Connected");
     }
 
     @Override
     public void onDisConnectedListener() {
+        XLogger.d("OnPhoneStateChangedListenerImpl->DisConnected");
         CallLogManager.getInstance().queryCallLogAndRecording(new IObserver<Boolean>() {
             @Override
-            public void onNext(@NonNull Boolean aBoolean) {
+            public void onNext(@NotNull @NonNull Boolean aBoolean) {
 
             }
         });

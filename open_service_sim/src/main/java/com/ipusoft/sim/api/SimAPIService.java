@@ -1,10 +1,7 @@
 package com.ipusoft.sim.api;
 
 import com.ipusoft.http.HttpConstant;
-import com.ipusoft.sim.bean.UploadResponse;
 
-import io.reactivex.rxjava3.core.Observable;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -19,14 +16,6 @@ import retrofit2.http.POST;
  */
 
 public interface SimAPIService {
-    /**
-     * 录音文件上传
-     *
-     * @param body
-     * @return
-     */
-    @POST("/app/recorder/uploadCall")
-    Observable<UploadResponse> uploadFile(@Body MultipartBody body);
 
     /**
      * SIM外呼风控

@@ -3,44 +3,43 @@ package com.ipusoft.sim.debug;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 
-import com.ipusoft.context.BaseActivity;
 import com.ipusoft.context.LiveDataBus;
 import com.ipusoft.context.bean.SysRecording;
-import com.ipusoft.context.utils.FileUtilsKt;
-import com.ipusoft.context.utils.SizeUtils;
+import com.ipusoft.localcall.bean.UploadProgress;
+import com.ipusoft.localcall.manager.UploadManager;
 import com.ipusoft.sim.R;
-import com.ipusoft.sim.bean.UploadProgress;
 import com.ipusoft.sim.databinding.SimActivitySimModuleMainBinding;
-import com.ipusoft.sim.manager.UploadManager;
 import com.ipusoft.sim.view.HowToOpenRecordingActivity;
+import com.ipusoft.utils.FileUtilsKt;
+import com.ipusoft.utils.SizeUtils;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimMainActivity extends BaseActivity {
+public class SimMainActivity extends AppCompatActivity {
     private SimActivitySimModuleMainBinding binding;
 
     @Override
-    protected void initViewModel() {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.sim_activity_sim_module_main);
+        initUI();
+        bindLiveData();
     }
 
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
     protected void initUI() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -54,7 +53,6 @@ public class SimMainActivity extends BaseActivity {
 
     long l = 0;
 
-    @Override
     protected void bindLiveData() {
         Map<String, Integer> stringIntegerMap = new HashMap<>();
         LiveDataBus.get().with("uploadProgress", UploadProgress.class).observe(this, uploadProgress -> {
@@ -89,11 +87,6 @@ public class SimMainActivity extends BaseActivity {
             l = c;
             // }
         });
-    }
-
-    @Override
-    protected void initRequest() {
-
     }
 
     public void queryCallLog(View view) {

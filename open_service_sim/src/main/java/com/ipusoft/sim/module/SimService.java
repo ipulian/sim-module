@@ -1,8 +1,8 @@
 package com.ipusoft.sim.module;
 
-import com.ipusoft.context.utils.ArrayUtils;
-import com.ipusoft.context.utils.GsonUtils;
-import com.ipusoft.context.utils.StringUtils;
+import com.ipusoft.utils.ArrayUtils;
+import com.ipusoft.utils.GsonUtils;
+import com.ipusoft.utils.StringUtils;
 import com.ipusoft.http.interceptors.base.BaseSimHttpInterceptor;
 import com.ipusoft.http.manager.RetrofitManager;
 import com.ipusoft.sim.api.SimAPIService;

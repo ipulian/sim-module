@@ -18,8 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.ipusoft.context.utils.SizeUtils;
-import com.ipusoft.context.utils.StringUtils;
+import com.ipusoft.utils.SizeUtils;
+import com.ipusoft.utils.StringUtils;
 import com.ipusoft.sim.R;
 import com.ipusoft.sim.iface.OnCancelClickListener;
 import com.ipusoft.sim.iface.OnConfirmClickListener;

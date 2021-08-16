@@ -10,7 +10,7 @@
         <activity android:name=".view.HowToOpenRecordingActivity" />
 
         <service
-            android:name="com.ipusoft.sim.service.WHCoreService"
+            android:name="com.ipusoft.localcall.service.AppCoreService"
             android:exported="false" />
     </application>
 

@@ -2,7 +2,7 @@ package com.ipusoft.sim.http;
 
 import android.widget.Toast;
 
-import com.ipusoft.context.IActivityLifecycle;
+import com.ipusoft.context.AppContext;
 import com.ipusoft.context.IpuSoftSDK;
 import com.ipusoft.context.bean.SimRiskControlBean;
 import com.ipusoft.context.manager.PhoneManager;
@@ -58,7 +58,7 @@ public class SimHttp {
                         if (SimConstant.TYPE_1 == type || SimConstant.TYPE_2 == type) {
                             showRiskControlDialog(simRiskControlBean);
                         } else {
-                            PhoneManager.callPhoneBySim(phone);
+                            PhoneManager.callPhoneBySim(phone, simRiskControlBean.getCallTime());
                         }
                     }
 
@@ -78,13 +78,13 @@ public class SimHttp {
         int type = simRiskControlBean.getType();
         String msg = simRiskControlBean.getMsg();
         String phone = simRiskControlBean.getPhone();
-        IAlertDialog.getInstance(IActivityLifecycle.getCurrentActivity())
+        IAlertDialog.getInstance(AppContext.getActivityContext())
                 .setMsg(msg)
                 .setShowCancelBtn(type == 2)
                 .setConfirmText(type == 1 ? "好的" : "")
                 .setOnConfirmClickListener(() -> {
                     if (type == 2) {
-                        PhoneManager.callPhoneBySim(phone);
+                        PhoneManager.callPhoneBySim(phone, simRiskControlBean.getCallTime());
                     }
                 }).show();
     }
