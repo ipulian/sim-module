@@ -1,10 +1,8 @@
 package com.ipusoft.sim.http;
 
-import android.widget.Toast;
-
 import com.ipusoft.context.AppContext;
-import com.ipusoft.context.IpuSoftSDK;
 import com.ipusoft.context.bean.SimRiskControlBean;
+import com.ipusoft.context.component.ToastUtils;
 import com.ipusoft.context.manager.PhoneManager;
 import com.ipusoft.http.RequestMap;
 import com.ipusoft.sim.component.IAlertDialog;
@@ -64,7 +62,7 @@ public class SimHttp {
 
                     @Override
                     public void onFailure(Throwable throwable) {
-                        Toast.makeText(IpuSoftSDK.getAppContext(), "查询出错", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showMessage("查询出错");
                     }
                 });
     }
@@ -80,12 +78,12 @@ public class SimHttp {
         String phone = simRiskControlBean.getPhone();
         IAlertDialog.getInstance(AppContext.getActivityContext())
                 .setMsg(msg)
-                .setShowCancelBtn(type == 2)
-                .setConfirmText(type == 1 ? "好的" : "")
+                .setShowCancelBtn(false)
+                .setConfirmText("好的")
                 .setOnConfirmClickListener(() -> {
-                    if (type == 2) {
-                        PhoneManager.callPhoneBySim(phone, simRiskControlBean.getCallTime());
-                    }
+                    //if (type == 2) {
+                    //    PhoneManager.callPhoneBySim(phone, simRiskControlBean.getCallTime());
+                    //}
                 }).show();
     }
 }

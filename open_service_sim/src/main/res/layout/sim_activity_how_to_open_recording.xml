@@ -6,11 +6,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="false"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="44dp"
             android:background="@color/themeColor">
 
             <LinearLayout
@@ -42,13 +43,33 @@
             android:layout_height="match_parent"
             android:layout_gravity="top">
 
-            <ImageView
-                android:id="@+id/iv_help"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:src="@mipmap/ic_how_to_open_recording" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_help"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/ic_how_to_open_recording" />
+
+                <TextView
+                    android:id="@+id/tv_to_open"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="@dimen/dp_16"
+                    android:background="@drawable/sim_bg_super_button_positive"
+                    android:gravity="center"
+                    android:text="去打开"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
         </ScrollView>
     </LinearLayout>
 </layout>

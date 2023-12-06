@@ -9,8 +9,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'com.github.dcendents.android-maven'
-group = 'com.github.team.github@51lianlian.com'
+//apply plugin: 'com.github.dcendents.android-maven'
+//group = 'com.github.team.github@51lianlian.com'
 
 android {
     compileSdkVersion 30
@@ -69,7 +69,21 @@ dependencies {
     if (isApp) {
         implementation project(":context:context")
     } else {
-        implementation 'com.github.ipulian:ipusdk:1.6.23'
-        // implementation project(":context:context")
+        // implementation 'com.github.ipulian:ipusdk:1.6.23'
+        implementation project(":context:context")
     }
+
+    /**
+     * Retrofit2
+     */
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+
+    /**
+     * RxJava + RxAndroid
+     */
+    implementation "io.reactivex.rxjava3:rxjava:3.0.12"
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 }
