@@ -24,7 +24,7 @@ dependencies {
  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
  <uses-permission android:name="android.permission.READ_CALL_LOG" />
 
- <application android:requestLegacyExternalStorage="true></application>
+ <application android:requestLegacyExternalStorage="true"></application>
 ```
 ## Usage
 - 1.主卡外呼(需要先申请android.permission.CALL_PHONE权限)
