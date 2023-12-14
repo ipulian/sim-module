@@ -29,7 +29,11 @@ public class OnPhoneStateChangedListenerImpl implements OnPhoneStateChangedListe
         SIMCallOutBean simCallOutBean = AppCacheContext.getSIMCallOutBean();
         if (simCallOutBean != null) {
             timestamp = System.currentTimeMillis();
-            SimDataRepo.addSIMCallOutBean(new SIMCallOutBean(simCallOutBean.getPhone(), simCallOutBean.getCallTime(), timestamp));
+            SimDataRepo.addSIMCallOutBean(
+                    new SIMCallOutBean(simCallOutBean.getPhone(),
+                            simCallOutBean.getCallTime(),
+                            simCallOutBean.getCallInfo(),
+                            timestamp));
             AppCacheContext.setSIMCallOutCallId(timestamp);
             AppCacheContext.setSIMCallOutBean(null);
         }

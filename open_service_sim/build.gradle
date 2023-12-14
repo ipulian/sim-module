@@ -67,10 +67,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     annotationProcessor 'com.alibaba:arouter-compiler:1.5.1'
     if (isApp) {
-        implementation project(":context:context")
+        implementation project(":ipusdk:context")
     } else {
-        implementation 'com.github.ipulian:ipusdk:2.0.2'
-        //implementation project(":context:context")
+        implementation 'com.github.ipulian:ipusdk:2.0.7'
+        // implementation project(":ipusdk:context")
     }
 
     /**
