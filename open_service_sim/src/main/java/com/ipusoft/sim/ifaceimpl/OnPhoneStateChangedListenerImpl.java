@@ -3,6 +3,7 @@ package com.ipusoft.sim.ifaceimpl;
 import android.util.Log;
 
 import com.elvishew.xlog.XLog;
+import com.ipusoft.context.ServiceManager;
 import com.ipusoft.context.cache.AppCacheContext;
 import com.ipusoft.context.constant.DateTimePattern;
 import com.ipusoft.context.listener.OnPhoneStateChangedListener;
@@ -53,20 +54,24 @@ public class OnPhoneStateChangedListenerImpl implements OnPhoneStateChangedListe
     public void onDisConnectedListener() {
         XLog.d("OnPhoneStateChangedListenerImpl->DisConnected");
 
+        ServiceManager.startPushCoreService();
+
         //记录电话的挂断时间
         List<SIMCallOutBean> list = SimDataRepo.getSIMCallOutBean();
-        for (SIMCallOutBean bean : list) {
-            if (bean != null) {
-                if (bean.getTimestamp() != null && bean.getTimestamp() != 0
-                        && timestamp != 0 && bean.getTimestamp() == timestamp) {
-                    bean.setReleaseTime(DateTimeUtils.getCurrentTime(DateTimePattern.getDateTimeWithSecondFormat()));
-                    break;
+        if (list != null && list.size() != 0) {
+            for (SIMCallOutBean bean : list) {
+                if (bean != null) {
+                    if (bean.getTimestamp() != null && bean.getTimestamp() != 0
+                            && timestamp != 0 && bean.getTimestamp() == timestamp) {
+                        bean.setReleaseTime(DateTimeUtils.getCurrentTime(DateTimePattern.getDateTimeWithSecondFormat()));
+                        break;
+                    }
                 }
             }
-        }
-        SimDataRepo.setSIMCallOutBean(list);
+            SimDataRepo.setSIMCallOutBean(list);
 
-        Log.d(TAG, "onDisConnectedListener: ---------------------------1");
-        CallLogManager.getInstance().queryCallLogAndRecording(null);
+            Log.d(TAG, "onDisConnectedListener: ---------------------------1");
+            CallLogManager.getInstance().queryCallLogAndRecording(null);
+        }
     }
 }
