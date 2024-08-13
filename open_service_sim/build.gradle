@@ -65,7 +65,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    annotationProcessor 'com.alibaba:arouter-compiler:1.5.1'
+//    annotationProcessor 'com.alibaba:arouter-compiler:1.5.1'
     if (isApp) {
         implementation project(":ipusdk:context")
     } else {
