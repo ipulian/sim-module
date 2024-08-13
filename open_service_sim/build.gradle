@@ -70,7 +70,7 @@ dependencies {
         implementation project(":ipusdk:context")
     } else {
         implementation 'com.github.ipulian:ipusdk:2.0.25'
-        //implementation project(":ipusdk:context")
+        //implementation project(":ipusdk:context") 
     }
 
     /**
