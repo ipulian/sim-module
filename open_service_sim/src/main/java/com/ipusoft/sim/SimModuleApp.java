@@ -2,6 +2,7 @@ package com.ipusoft.sim;
 
 import android.content.Intent;
 
+import com.elvishew.xlog.XLog;
 import com.ipusoft.context.AppContext;
 import com.ipusoft.context.AppManager;
 import com.ipusoft.context.IpuSoftSDK;
@@ -31,6 +32,9 @@ public class SimModuleApp extends IpuSoftSDK {
         boolean serviceRunning = ServiceManager.isServiceRunning(AppCoreService.class);
         if (runningForeground && !serviceRunning) {
             String token = AppContext.getToken();
+            if (token.isEmpty()) {
+                XLog.e(TAG + "->initModule->Token is empty!");
+            }
             if (StringUtils.isNotEmpty(token)) {
                 AppContext.getAppContext().startService(new Intent(AppContext.getAppContext(), AppCoreService.class));
             }
